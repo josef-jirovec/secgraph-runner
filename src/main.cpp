@@ -1,8 +1,9 @@
-#include <iostream>
-#include <fstream>
+#include <memory>
+#include "SecGraphRunner.hpp"
 
 
 int main()
 {
-	return 0;
+	std::unique_ptr<SecGraphRunner> secGraphRunner = std::make_unique<SecGraphRunner>();
+	return secGraphRunner->run();
 }
