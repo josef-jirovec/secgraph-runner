@@ -20,7 +20,6 @@ int SecGraphRunner::run()
 				   ioHandler->setInputPathToAnonymizedGraphDirectory(pathToAnonymizedGraphDirectory))
 				{
 					//TODO: anonymize with multiple threads
-
 				}
 				else
 				{
