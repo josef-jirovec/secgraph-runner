@@ -35,7 +35,7 @@ void IOHandler::printInvalidArgumentError()
 	std::cout << MessageContainer::INVALID_ARGUMENT << '\n';
 }
 
-bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph)
+bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph, int & exitCode)
 {
 	std::cout << MessageContainer::INPUT_SOURCE_GRAPH << '\n';
 	std::cin >> currentInput;
@@ -48,6 +48,7 @@ bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph)
 			std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << '\n';
 			std::cout << MessageContainer::PATH_TO_DIR_INSTEAD_OF_GRAPH << '\n';
 			sourceGraph.clear();
+			exitCode = 1;
 			return false;
 		}
 		return true;
@@ -56,11 +57,12 @@ bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph)
 	{
 		std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << '\n';
 		sourceGraph.clear();
+		exitCode = 2;
 		return false;
 	}
 }
 
-bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDirectory)
+bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDirectory, int & exitCode)
 {
 	std::cout << MessageContainer::INPUT_RESULT_GRAPH_DIR << '\n';
 	std::cin >> currentInput;
@@ -73,6 +75,7 @@ bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDire
 			std::cout << MessageContainer::INVALID_PATH_TO_DIR << '\n';
 			std::cout << MessageContainer::PATH_TO_GRAPH_INSTEAD_OF_DIR << '\n';
 			anonymizedDirectory.clear();
+			exitCode = 3;
 			return false;
 		}
 		return true;
@@ -81,6 +84,35 @@ bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDire
 	{
 		std::cout << MessageContainer::INVALID_PATH_TO_DIR << '\n';
 		anonymizedDirectory.clear();
+		exitCode = 4;
 		return false;
 	}
+}
+
+bool IOHandler::setInputAnonymizationMethod(GraphTheory::AnonMethod & anonMethod, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_ANON_METHOD << '\n';
+	std::cin >> currentInput;
+	anonMethod = GraphTheory::anonMethodFromString(currentInput);
+	if(anonMethod == GraphTheory::AnonMethod::Undefined)
+	{
+		std::cout << MessageContainer::INVALID_ANON_METHOD_NAME << '\n';
+		exitCode = 4;
+		return false;
+	}
+	return true;
+}
+
+bool IOHandler::setInputUtilityMetric(GraphTheory::UtilMetric & utilMetric, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_UTIL_METRIC << '\n';
+	std::cin >> currentInput;
+	utilMetric = GraphTheory::utilMetricFromString(currentInput);
+	if(utilMetric == GraphTheory::UtilMetric::Undefined)
+	{
+		std::cout << MessageContainer::INVALID_UTIL_METRIC_NAME << '\n';
+		exitCode = 5;
+		return false;
+	}
+	return true;
 }

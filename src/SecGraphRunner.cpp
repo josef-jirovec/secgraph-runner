@@ -1,6 +1,7 @@
 #include "SecGraphRunner.hpp"
 
-SecGraphRunner::SecGraphRunner() : exitFlag(false), exitCode(0), runnerState(RunnerState::Init)
+SecGraphRunner::SecGraphRunner() : exitFlag(false), exitCode(0), runnerState(RunnerState::Init),
+								   anonMethod(GraphTheory::AnonMethod::Undefined), utilMetric(GraphTheory::UtilMetric::Undefined)
 {
 	this->ioHandler = std::make_unique<IOHandler>();
 }
@@ -16,15 +17,16 @@ int SecGraphRunner::run()
 				runnerState = ioHandler->chooseRunnerFunctionality();
 				break;
 			case RunnerState::Anon:
-				if(ioHandler->setInputPathToSourceGraph(pathToSourceGraph) &&
-				   ioHandler->setInputPathToAnonymizedGraphDirectory(pathToAnonymizedGraphDirectory))
+				if(ioHandler->setInputPathToSourceGraph(pathToSourceGraph, exitCode) &&
+				   ioHandler->setInputPathToAnonymizedGraphDirectory(pathToAnonymizedGraphDirectory, exitCode) &&
+				   ioHandler->setInputAnonymizationMethod((anonMethod), exitCode) &&
+				   ioHandler->setInputUtilityMetric(utilMetric, exitCode))
 				{
 					//TODO: anonymize with multiple threads
 				}
 				else
 				{
 					ioHandler->printInvalidArgumentError();
-					exitCode = 1;
 				}
 				runnerState = RunnerState::Exit;
 				break;
