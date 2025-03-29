@@ -38,6 +38,9 @@ void IOHandler::printInvalidArgumentError()
 bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph)
 {
 	std::cin >> currentInput;
+	sourceGraph.clear();
+	sourceGraph.assign(currentInput);
+	std::cout << sourceGraph;
 	return true;
 }
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include "SecGraphRunner.hpp"
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 class IOHandler
 {
