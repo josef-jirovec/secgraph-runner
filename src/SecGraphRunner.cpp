@@ -1,33 +1,44 @@
 #include "SecGraphRunner.hpp"
-#include "MessageContainer.hpp"
 
-SecGraphRunner::SecGraphRunner()
+SecGraphRunner::SecGraphRunner() : exitFlag(false)
 {
-	this->runnerState = SecGraphRunner::RunnerState::Init;
-	exitFlag = false;
+	this->runnerState = RunnerState::Init;
+	this->ioHandler = std::make_unique<IOHandler>();
 }
 
 int SecGraphRunner::run()
 {
-	ioHandler.printGreeting();
+	ioHandler->printVersion();
 	while(!exitFlag)
 	{
 		switch (runnerState)
 		{
-			case Init:
+			case RunnerState::Init:
+				runnerState = ioHandler->chooseRunnerFunctionality();
 				break;
-			case Anon:
+			case RunnerState::Anon:
+				if(ioHandler->setInputPathToSourceGraph(pathToSourceGraph) &&
+				   ioHandler->setInputPathToAnonymizedGraphDirectory(pathToAnonymizedGraphDirectory))
+				{
+					//TODO: anonymize with multiple threads
+				}
+				else
+				{
+					ioHandler->printInvalidArgumentError();
+				}
+				runnerState = RunnerState::Exit;
 				break;
-			case Util:
+			case RunnerState::Util:
+				//TODO:implement
+				runnerState = RunnerState::Exit;
+				break;
+			case RunnerState::Exit:
+				exitFlag = true;
+				ioHandler->printExit();
 				break;
 		}
 	}
 
 
 	return 0;
-}
-
-std::string SecGraphRunner::getCurrentVersion()
-{
-	return MessageContainer::CURRENT_VERSION;
 }

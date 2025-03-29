@@ -1,20 +1,22 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include "RunnerState.hpp"
 #include "IOHandler.hpp"
+
+class IOHandler;
 
 class SecGraphRunner
 {
 	public:
 		SecGraphRunner();
 		int run();
-		static std::string getCurrentVersion();
-	private:
-		enum RunnerState {Init, Anon, Util};
 
-		IOHandler ioHandler;
+	private:
+		std::unique_ptr<IOHandler> ioHandler;
 		RunnerState runnerState;
 		bool exitFlag;
-
-
+		std::string pathToSourceGraph;
+		std::string pathToAnonymizedGraphDirectory;
 };
