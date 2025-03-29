@@ -2,6 +2,8 @@
 #include <iostream>
 #include "SecGraphRunner.hpp"
 
+namespace fs = std::experimental::filesystem;
+
 class IOHandler
 {
 	public:
@@ -9,8 +11,8 @@ class IOHandler
 		void printExit();
 		void printInvalidArgumentError();
 		RunnerState chooseRunnerFunctionality();
-		bool setInputPathToSourceGraph(std::string & sourceGraph);
-		bool setInputPathToAnonymizedGraphDirectory(std::string & anonymizedDirectory);
+		bool setInputPathToSourceGraph(fs::path & sourceGraph);
+		bool setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDirectory);
 
 	private:
 		void loadNewInput();

@@ -35,12 +35,13 @@ void IOHandler::printInvalidArgumentError()
 	std::cout << MessageContainer::INVALID_ARGUMENT << '\n';
 }
 
-bool IOHandler::setInputPathToSourceGraph(std::string & sourceGraph)
+bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph)
 {
+	std::cin >> currentInput;
 	return true;
 }
 
-bool IOHandler::setInputPathToAnonymizedGraphDirectory(std::string & anonymizedDirectory)
+bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDirectory)
 {
 	return true;
 }
