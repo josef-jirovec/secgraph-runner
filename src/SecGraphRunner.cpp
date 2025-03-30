@@ -1,7 +1,9 @@
+#include <fstream>
 #include "SecGraphRunner.hpp"
 
 SecGraphRunner::SecGraphRunner() : exitFlag(false), exitCode(0), runnerState(RunnerState::Init),
-								   anonMethod(GraphTheory::AnonMethod::Undefined), utilMetric(GraphTheory::UtilMetric::Undefined)
+								   anonMethod(GraphTheory::AnonMethod::Undefined), utilMetric(GraphTheory::UtilMetric::Undefined),
+								   pathToConfig("secgraph-runner.config")
 {
 	this->ioHandler = std::make_unique<IOHandler>();
 }
@@ -14,6 +16,20 @@ int SecGraphRunner::run()
 		switch (runnerState)
 		{
 			case RunnerState::Init:
+				if(fs::is_regular_file(pathToConfig))
+				{
+					if(loadDataFromConfigFile())
+						runnerState = RunnerState::ModeChoice;
+				}
+				else
+				{
+					if(createConfigFile())
+						runnerState = RunnerState::ModeChoice;
+					else
+						runnerState = RunnerState::Exit;
+				}
+				break;
+			case RunnerState::ModeChoice:
 				runnerState = ioHandler->chooseRunnerFunctionality();
 				break;
 			case RunnerState::Anon:
@@ -42,3 +58,17 @@ int SecGraphRunner::run()
 	}
 	return exitCode;
 }
+
+bool SecGraphRunner::createConfigFile()
+{
+	std::string command = "touch " + pathToConfig.string();
+	std::system(command.c_str());
+	return ioHandler->setInputPathToSecGraph(pathToSecGraph, exitCode) &&
+		ioHandler->writeSecGraphPathToConfigFile(pathToSecGraph, pathToConfig);
+}
+
+bool SecGraphRunner::loadDataFromConfigFile()
+{
+	return ioHandler->readDataFromConfigFile(pathToConfig, pathToSecGraph);
+}
+

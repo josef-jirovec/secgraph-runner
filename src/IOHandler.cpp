@@ -1,9 +1,10 @@
+#include <fstream>
 #include "IOHandler.hpp"
 #include "MessageContainer.hpp"
 
 void IOHandler::printVersion()
 {
-	std::cout << MessageContainer::CURRENT_VERSION << '\n';
+	std::cout << MessageContainer::CURRENT_VERSION << std::endl;
 }
 
 void IOHandler::loadNewInput()
@@ -13,7 +14,7 @@ void IOHandler::loadNewInput()
 
 RunnerState IOHandler::chooseRunnerFunctionality()
 {
-	std::cout << MessageContainer::CHOOSE_ANON_OR_UTIL << '\n';
+	std::cout << MessageContainer::CHOOSE_ANON_OR_UTIL << std::endl;
 	loadNewInput();
 	if(currentInput == "anon")
 			return RunnerState::Anon;
@@ -27,26 +28,44 @@ RunnerState IOHandler::chooseRunnerFunctionality()
 
 void IOHandler::printExit()
 {
-	std::cout << MessageContainer::PROGRAM_EXITED << '\n';
+	std::cout << MessageContainer::PROGRAM_EXITED << std::endl;
 }
 
 void IOHandler::printInvalidArgumentError()
 {
-	std::cout << MessageContainer::INVALID_ARGUMENT << '\n';
+	std::cout << MessageContainer::INVALID_ARGUMENT << std::endl;
+}
+
+bool IOHandler::setInputPathToSecGraph(fs::path & secgraph, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_SECGRAPH_PATH << std::endl;
+	loadNewInput();
+	secgraph.clear();
+	secgraph.assign(currentInput);
+	if(!fs::is_regular_file(secgraph))
+	{
+		std::cout << MessageContainer::INVALID_PATH_TO_SECGRAPH<< std::endl;
+		secgraph.clear();
+		exitCode = 6;
+		return false;
+	}
+	else
+		return true;
+
 }
 
 bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph, int & exitCode)
 {
-	std::cout << MessageContainer::INPUT_SOURCE_GRAPH << '\n';
-	std::cin >> currentInput;
+	std::cout << MessageContainer::INPUT_SOURCE_GRAPH << std::endl;
+	loadNewInput();
 	sourceGraph.clear();
 	sourceGraph.assign(currentInput);
 	if(fs::exists(sourceGraph))
 	{
 		if(fs::is_directory(sourceGraph))
 		{
-			std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << '\n';
-			std::cout << MessageContainer::PATH_TO_DIR_INSTEAD_OF_GRAPH << '\n';
+			std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << std::endl;
+			std::cout << MessageContainer::PATH_TO_DIR_INSTEAD_OF_GRAPH << std::endl;
 			sourceGraph.clear();
 			exitCode = 1;
 			return false;
@@ -55,7 +74,7 @@ bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph, int & exitCode
 	}
 	else
 	{
-		std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << '\n';
+		std::cout << MessageContainer::INVALID_PATH_TO_GRAPH << std::endl;
 		sourceGraph.clear();
 		exitCode = 2;
 		return false;
@@ -64,16 +83,16 @@ bool IOHandler::setInputPathToSourceGraph(fs::path & sourceGraph, int & exitCode
 
 bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDirectory, int & exitCode)
 {
-	std::cout << MessageContainer::INPUT_RESULT_GRAPH_DIR << '\n';
-	std::cin >> currentInput;
+	std::cout << MessageContainer::INPUT_RESULT_GRAPH_DIR << std::endl;
+	loadNewInput();
 	anonymizedDirectory.clear();
 	anonymizedDirectory.assign(currentInput);
 	if(fs::exists(anonymizedDirectory))
 	{
 		if(!fs::is_directory(anonymizedDirectory))
 		{
-			std::cout << MessageContainer::INVALID_PATH_TO_DIR << '\n';
-			std::cout << MessageContainer::PATH_TO_GRAPH_INSTEAD_OF_DIR << '\n';
+			std::cout << MessageContainer::INVALID_PATH_TO_DIR << std::endl;
+			std::cout << MessageContainer::PATH_TO_GRAPH_INSTEAD_OF_DIR << std::endl;
 			anonymizedDirectory.clear();
 			exitCode = 3;
 			return false;
@@ -82,7 +101,7 @@ bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDire
 	}
 	else
 	{
-		std::cout << MessageContainer::INVALID_PATH_TO_DIR << '\n';
+		std::cout << MessageContainer::INVALID_PATH_TO_DIR << std::endl;
 		anonymizedDirectory.clear();
 		exitCode = 4;
 		return false;
@@ -91,12 +110,12 @@ bool IOHandler::setInputPathToAnonymizedGraphDirectory(fs::path & anonymizedDire
 
 bool IOHandler::setInputAnonymizationMethod(GraphTheory::AnonMethod & anonMethod, int & exitCode)
 {
-	std::cout << MessageContainer::INPUT_ANON_METHOD << '\n';
+	std::cout << MessageContainer::INPUT_ANON_METHOD << std::endl;
 	std::cin >> currentInput;
 	anonMethod = GraphTheory::anonMethodFromString(currentInput);
 	if(anonMethod == GraphTheory::AnonMethod::Undefined)
 	{
-		std::cout << MessageContainer::INVALID_ANON_METHOD_NAME << '\n';
+		std::cout << MessageContainer::INVALID_ANON_METHOD_NAME << std::endl;
 		exitCode = 4;
 		return false;
 	}
@@ -105,14 +124,50 @@ bool IOHandler::setInputAnonymizationMethod(GraphTheory::AnonMethod & anonMethod
 
 bool IOHandler::setInputUtilityMetric(GraphTheory::UtilMetric & utilMetric, int & exitCode)
 {
-	std::cout << MessageContainer::INPUT_UTIL_METRIC << '\n';
-	std::cin >> currentInput;
+	std::cout << MessageContainer::INPUT_UTIL_METRIC << std::endl;
+	loadNewInput();
 	utilMetric = GraphTheory::utilMetricFromString(currentInput);
 	if(utilMetric == GraphTheory::UtilMetric::Undefined)
 	{
-		std::cout << MessageContainer::INVALID_UTIL_METRIC_NAME << '\n';
+		std::cout << MessageContainer::INVALID_UTIL_METRIC_NAME << std::endl;
 		exitCode = 5;
 		return false;
 	}
 	return true;
+}
+
+bool IOHandler::writeSecGraphPathToConfigFile(const fs::path & secgraph, const fs::path & config)
+{
+	std::ofstream configFile(config.c_str());
+	if(configFile.is_open())
+	{
+		configFile << secgraph.c_str() << std::endl;
+		configFile.close();
+		return true;
+	}
+	return false;
+}
+
+bool IOHandler::readDataFromConfigFile(fs::path &config, fs::path & secgraph)
+{
+	std::ifstream configFile(config.c_str());
+	std::string currentLine;
+	if(configFile.is_open())
+	{
+		std::getline(configFile, currentLine);
+		secgraph.assign(currentLine);
+		configFile.close();
+		if(fs::is_regular_file(currentLine.c_str()))
+		{
+			return true;
+		}
+		else
+		{
+			std::string removeInvalidConfigFile = "rm " + config.string();
+			std::system(removeInvalidConfigFile.c_str());
+			secgraph.clear();
+		}
+	}
+	std::cout << MessageContainer::ERROR_CONFIG_FILE << std::endl;
+	return false;
 }

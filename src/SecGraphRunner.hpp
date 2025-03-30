@@ -18,10 +18,15 @@ class SecGraphRunner
 		int run();
 
 	private:
+		bool createConfigFile();
+		bool loadDataFromConfigFile();
+
 		std::unique_ptr<IOHandler> ioHandler;
 		RunnerState runnerState;
 		bool exitFlag;
 		int exitCode;
+		fs::path pathToConfig;
+		fs::path pathToSecGraph;
 		fs::path pathToSourceGraph;
 		fs::path pathToAnonymizedGraphDirectory;
 		GraphTheory::AnonMethod anonMethod;

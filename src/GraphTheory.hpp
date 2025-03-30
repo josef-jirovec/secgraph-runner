@@ -27,13 +27,13 @@ class GraphTheory
 
 		static AnonMethod anonMethodFromString(const std::string & methodString)
 		{
-			if (methodString == "kDA" || methodString == "KDA")
+			if (methodString == "kDA" || methodString == "KDA" || methodString == "kda")
 				return AnonMethod::kDA;
-			if (methodString == "USC")
+			if (methodString == "USC" || methodString == "usc")
 				return AnonMethod::USC;
-			if (methodString == "DP")
+			if (methodString == "DP" || methodString == "dp")
 				return AnonMethod::DP;
-			if (methodString == "RW")
+			if (methodString == "RW" || methodString == "rw")
 				return AnonMethod::RW;
 			return AnonMethod ::Undefined;
 		}
@@ -59,11 +59,11 @@ class GraphTheory
 		{
 			if (metricString == "Deg" || metricString == "deg")
 				return UtilMetric::Deg;
-			if (metricString == "EV")
+			if (metricString == "EV" || metricString == "ev")
 				return UtilMetric::EV;
-			if (metricString == "CC")
+			if (metricString == "CC" || metricString == "cc")
 				return UtilMetric::CC;
-			if (metricString == "BC")
+			if (metricString == "BC" || metricString == "bc")
 				return UtilMetric::BC;
 			return UtilMetric::Undefined;
 		}

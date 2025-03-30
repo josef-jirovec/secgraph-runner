@@ -1,4 +1,4 @@
 enum class RunnerState
 {
-		Init, Anon, Util, Exit
+		Init, ModeChoice, Anon, Util, Exit
 };
