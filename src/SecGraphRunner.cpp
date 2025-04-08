@@ -50,6 +50,10 @@ int SecGraphRunner::run()
 				//TODO:implement
 				runnerState = RunnerState::Exit;
 				break;
+			case RunnerState::AppIL:
+				//TODO:implement
+				runnerState = RunnerState::Exit;
+				break;
 			case RunnerState::Exit:
 				exitFlag = true;
 				ioHandler->printExit();

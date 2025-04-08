@@ -6,6 +6,7 @@
 #include "RunnerState.hpp"
 #include "IOHandler.hpp"
 #include "GraphTheory.hpp"
+#include "ApplicationScenario.hpp"
 
 namespace fs = std::filesystem;
 
@@ -29,6 +30,8 @@ class SecGraphRunner
 		fs::path pathToSecGraph;
 		fs::path pathToSourceGraph;
 		fs::path pathToAnonymizedGraphDirectory;
+		fs::path pathToUtilityMetricsDirectory;
+		fs::path pathToAppILScenariosDirectory;
 		GraphTheory::AnonMethod anonMethod;
 		GraphTheory::UtilMetric utilMetric;
 };
