@@ -18,6 +18,12 @@ struct MessageContainer
 				"Please enter the anonymization method you want to use:";
 		inline static const std::string INPUT_UTIL_METRIC =
 				"Please enter the utility metric you want to measure:";
+		inline static const std::string INPUT_UTIL_METRIC_DIR =
+				"Please enter the absolute path to directory with measured utility metrics:";
+		inline static const std::string INPUT_APPIL_RESULTS_DIR =
+				"Please enter the absolute path to directory where you want the AppIL results to be stored:";
+		inline static const std::string INPUT_SCENARIO_FILE =
+				"Please enter the absolute path to the application scenario you want to calculate AppIL for:";
 		inline static const std::string PROGRAM_EXITED =
 				"Exiting SecGraph-Runner.";
 		inline static const std::string INVALID_ARGUMENT =
@@ -28,6 +34,8 @@ struct MessageContainer
 				"Invalid path to the graph.";
 		inline static const std::string INVALID_PATH_TO_SECGRAPH =
 				"Invalid path to the SecGraph .jar file.";
+		inline static const std::string INVALID_PATH_TO_SCENARIO =
+				"Invalid path to the Application Scenario.";
 		inline static const std::string PATH_TO_DIR_INSTEAD_OF_GRAPH =
 				"The path provided leads to a directory, not a graph.";
 		inline static const std::string PATH_TO_GRAPH_INSTEAD_OF_DIR =

@@ -31,7 +31,8 @@ class SecGraphRunner
 		fs::path pathToSourceGraph;
 		fs::path pathToAnonymizedGraphDirectory;
 		fs::path pathToUtilityMetricsDirectory;
-		fs::path pathToAppILScenariosDirectory;
+		fs::path pathToAppILResultsDirectory;
+		fs::path pathToAppILScenario;
 		GraphTheory::AnonMethod anonMethod;
 		GraphTheory::UtilMetric utilMetric;
 };

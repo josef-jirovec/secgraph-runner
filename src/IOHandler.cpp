@@ -17,9 +17,11 @@ RunnerState IOHandler::chooseRunnerFunctionality()
 	std::cout << MessageContainer::CHOOSE_ANON_OR_UTIL << std::endl;
 	loadNewInput();
 	if(currentInput == "anon")
-			return RunnerState::Anon;
+		return RunnerState::Anon;
 	if(currentInput == "util")
-			return RunnerState::Util;
+		return RunnerState::Util;
+	if(currentInput == "appil" || "AppIL")
+		return RunnerState::AppIL;
 	if(currentInput == "exit" || std::cin.eof())
 		return RunnerState::Exit;
 	printInvalidArgumentError();
@@ -170,4 +172,50 @@ bool IOHandler::readDataFromConfigFile(fs::path &config, fs::path & secgraph)
 	}
 	std::cout << MessageContainer::ERROR_CONFIG_FILE << std::endl;
 	return false;
+}
+
+bool IOHandler::setInputPathToUtilityMetricsDirectory(fs::path & utilMetricDir, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_UTIL_METRIC_DIR << std::endl;
+	loadNewInput();
+	utilMetricDir.clear();
+	utilMetricDir.assign(currentInput);
+	if(fs::is_directory(utilMetricDir))
+		return true;
+	else
+	{
+		std::cout << MessageContainer::INVALID_PATH_TO_DIR << std::endl;
+		exitCode = 6;
+		return false;
+	}
+}
+bool IOHandler::setInputPathToAppILResultsDirectory(fs::path & appILResultsDir, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_APPIL_RESULTS_DIR << std::endl;
+	loadNewInput();
+	appILResultsDir.clear();
+	appILResultsDir.assign(currentInput);
+	if(fs::is_directory(appILResultsDir))
+		return true;
+	else
+	{
+		std::cout << MessageContainer::INVALID_PATH_TO_DIR << std::endl;
+		exitCode = 7;
+		return false;
+	}
+}
+bool IOHandler::setInputPathToAppILScenario(fs::path & appILScenario, int & exitCode)
+{
+	std::cout << MessageContainer::INPUT_SCENARIO_FILE << std::endl;
+	loadNewInput();
+	appILScenario.clear();
+	appILScenario.assign(currentInput);
+	if(fs::is_regular_file(appILScenario))
+		return true;
+	else
+	{
+		std::cout << MessageContainer::INVALID_PATH_TO_SCENARIO << std::endl;
+		exitCode = 7;
+		return false;
+	}
 }

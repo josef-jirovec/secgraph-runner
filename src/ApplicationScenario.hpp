@@ -10,11 +10,11 @@ class ApplicationScenario
 		ApplicationScenario();
 		ApplicationScenario(const std::string & name);
 
-		void addMetric(GraphTheory::UtilMetric metric, double weight);
+		void addMetric(unsigned int metricRowIndex, double weight);
 	private:
 
 		std::string name;
-		std::vector<GraphTheory::UtilMetric> metrics;
+		std::vector<unsigned int> metricRowIndices;
 		std::vector<double> weights;
 
 

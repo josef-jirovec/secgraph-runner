@@ -35,7 +35,7 @@ int SecGraphRunner::run()
 			case RunnerState::Anon:
 				if(ioHandler->setInputPathToSourceGraph(pathToSourceGraph, exitCode) &&
 				   ioHandler->setInputPathToAnonymizedGraphDirectory(pathToAnonymizedGraphDirectory, exitCode) &&
-				   ioHandler->setInputAnonymizationMethod((anonMethod), exitCode) &&
+				   ioHandler->setInputAnonymizationMethod(anonMethod, exitCode) &&
 				   ioHandler->setInputUtilityMetric(utilMetric, exitCode))
 				{
 					//TODO: anonymize with multiple threads
@@ -51,7 +51,16 @@ int SecGraphRunner::run()
 				runnerState = RunnerState::Exit;
 				break;
 			case RunnerState::AppIL:
-				//TODO:implement
+				if(ioHandler->setInputPathToAppILScenario(pathToAppILScenario, exitCode) &&
+				   ioHandler->setInputPathToUtilityMetricsDirectory(pathToUtilityMetricsDirectory, exitCode) &&
+				   ioHandler->setInputPathToAppILResultsDirectory(pathToAppILResultsDirectory, exitCode))
+				{
+					//TODO:implement
+				}
+				else
+				{
+					ioHandler->printInvalidArgumentError();
+				}
 				runnerState = RunnerState::Exit;
 				break;
 			case RunnerState::Exit:
