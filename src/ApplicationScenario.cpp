@@ -37,7 +37,7 @@ const std::string & ApplicationScenario::getName() const
 	return name;
 }
 
-unsigned int ApplicationScenario::getMetricRowCount() const
+const unsigned int ApplicationScenario::getMetricRowCount() const
 {
 	return metricRowCount;
 }
@@ -46,4 +46,10 @@ const std::vector<unsigned int> & ApplicationScenario::getMetricRowIndices() con
 {
 	return metricRowIndices;
 }
+
+const std::vector<double> & ApplicationScenario::getWeights() const
+{
+	return weights;
+}
+
 

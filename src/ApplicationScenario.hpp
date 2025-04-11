@@ -14,7 +14,7 @@ class ApplicationScenario
 		ApplicationScenario(const std::string & name);
 		ApplicationScenario(const fs::path & path);
 		const std::string & getName() const;
-		unsigned int getMetricRowCount() const;
+		const unsigned int getMetricRowCount() const;
 		const std::vector<unsigned int> & getMetricRowIndices() const;
 		const std::vector<double> & getWeights() const;
 

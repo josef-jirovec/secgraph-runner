@@ -20,7 +20,7 @@ RunnerState IOHandler::chooseRunnerFunctionality()
 		return RunnerState::Anon;
 	if(currentInput == "util")
 		return RunnerState::Util;
-	if(currentInput == "appil" || "AppIL")
+	if(currentInput == "appil" || currentInput == "AppIL")
 		return RunnerState::AppIL;
 	if(currentInput == "exit" || std::cin.eof())
 		return RunnerState::Exit;

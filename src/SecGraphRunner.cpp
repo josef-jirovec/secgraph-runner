@@ -60,7 +60,7 @@ int SecGraphRunner::run()
 					applicationScenario = ApplicationScenario(pathToAppILScenario);
 					loadUtilityMetricFileNames();
 					loadUtilityMetricValues();
-					fs::path appILResult = calculateAppIL(applicationScenario);
+					fs::path appILResultFile = calculateAppIL(applicationScenario);
 				}
 				else
 				{
@@ -92,7 +92,39 @@ bool SecGraphRunner::loadDataFromConfigFile()
 
 fs::path SecGraphRunner::calculateAppIL(const ApplicationScenario & applicationScenario)
 {
-	return fs::path();
+	fs::path pathToResult = pathToAppILResultsDirectory;
+	pathToResult = pathToResult / applicationScenario.getName();
+	if(fs::exists(pathToResult))
+		fs::remove(pathToResult);
+	std::string command = "touch ";
+	command.append(pathToResult.string());
+	std::system(command.c_str());
+
+	std::ofstream resultFile(pathToResult);
+	if(resultFile.is_open())
+	{
+		unsigned int utilityMetricIndex = 0;
+		unsigned int datasetNamesIndex = 0;
+		double sumOfWeightedMetrics = 0;
+		while (utilityMetricIndex < utilityMetricValues->size())
+		{
+			for (size_t i = 0; i < applicationScenario.getMetricRowIndices().size(); i++)
+			{
+				unsigned int currentMetricRow = applicationScenario.getMetricRowIndices().at(i) + utilityMetricIndex;
+				double currentMetricWeight = applicationScenario.getWeights().at(i);
+				double currentMetricValue = utilityMetricValues->at(currentMetricRow);
+				double weightedMetricValue = currentMetricValue * currentMetricWeight;
+				sumOfWeightedMetrics += weightedMetricValue;
+			}
+			double appIL = 1 - sumOfWeightedMetrics;
+			resultFile << utilityMetricFileNames->at(datasetNamesIndex) << ' ' << appIL << std::endl;
+			utilityMetricIndex += applicationScenario.getMetricRowCount();
+			datasetNamesIndex++;
+			sumOfWeightedMetrics = 0;
+		}
+		resultFile.close();
+	}
+	return pathToResult;
 }
 
 void SecGraphRunner::loadUtilityMetricFileNames()
