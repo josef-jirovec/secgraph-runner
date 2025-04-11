@@ -22,8 +22,15 @@ class IOHandler
 		bool setInputPathToAppILScenario(fs::path & appILScenario, int & exitCode);
 		bool writeSecGraphPathToConfigFile(const fs::path & secgraph, const fs::path & config);
 		bool readDataFromConfigFile(fs::path & config, fs::path & secgraph);
+		void loadFileNamesFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<std::string>> & fileNames);
+		void loadAllFilesContentFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<std::string>> & linesRead);
+		void loadAllFilesContentFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<double>> & valuesRead);
+
 
 	private:
 		void loadNewInput();
+		void setupTemporaryFile();
+		void loadTemporaryFileToStrings(std::unique_ptr<std::vector<std::string>> & lines);
+		void loadTemporaryFileToDoubles(std::unique_ptr<std::vector<double>> & values);
 		std::string currentInput;
 };

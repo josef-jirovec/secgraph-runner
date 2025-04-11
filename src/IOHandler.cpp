@@ -219,3 +219,71 @@ bool IOHandler::setInputPathToAppILScenario(fs::path & appILScenario, int & exit
 		return false;
 	}
 }
+
+void IOHandler::setupTemporaryFile()
+{
+	if(fs::exists(fs::path("./tmp.txt")))
+		std::system("rm --force ./tmp.txt");
+	std::system("touch ./tmp.txt");
+}
+
+void IOHandler::loadTemporaryFileToStrings(std::unique_ptr<std::vector<std::string>> & lines)
+{
+	std::ifstream temporaryFile("tmp.txt");
+	std::string line;
+	if(temporaryFile.is_open())
+	{
+		while(getline(temporaryFile, line))
+		{
+			lines->emplace_back(line);
+		}
+		temporaryFile.close();
+	}
+}
+
+void IOHandler::loadTemporaryFileToDoubles(std::unique_ptr<std::vector<double>> & values)
+{
+	std::ifstream temporaryFile("tmp.txt");
+	std::string line;
+	if(temporaryFile.is_open())
+	{
+		while(getline(temporaryFile, line))
+		{
+			values->emplace_back(std::stod(line));
+		}
+		temporaryFile.close();
+	}
+}
+
+
+
+void IOHandler::loadFileNamesFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<std::string>> & fileNames)
+{
+	setupTemporaryFile();
+	std::string command = "ls ";
+	command.append(directory.string());
+	command.append(" > ");
+	command.append("tmp.txt");
+	std::system(command.c_str());
+	loadTemporaryFileToStrings(fileNames);
+}
+
+void IOHandler::loadAllFilesContentFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<std::string>> & linesRead)
+{
+	setupTemporaryFile();
+	std::string command = "cat ";
+	command.append(directory.string());
+	command.append("/* > tmp.txt");
+	std::system(command.c_str());
+	loadTemporaryFileToStrings(linesRead);
+}
+
+void IOHandler::loadAllFilesContentFromDirectory(const fs::path & directory, std::unique_ptr<std::vector<double>> & valuesRead)
+{
+	setupTemporaryFile();
+	std::string command = "cat ";
+	command.append(directory.string());
+	command.append("/* > tmp.txt");
+	std::system(command.c_str());
+	loadTemporaryFileToDoubles(valuesRead);
+}

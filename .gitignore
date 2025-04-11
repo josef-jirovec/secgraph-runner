@@ -1,2 +1,5 @@
 .idea/
 cmake-build-debug/
+scenario*
+random.txt
+tmp.txt

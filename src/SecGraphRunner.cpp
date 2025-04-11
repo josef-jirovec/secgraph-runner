@@ -2,10 +2,12 @@
 #include "SecGraphRunner.hpp"
 
 SecGraphRunner::SecGraphRunner() : exitFlag(false), exitCode(0), runnerState(RunnerState::Init),
-								   anonMethod(GraphTheory::AnonMethod::Undefined), utilMetric(GraphTheory::UtilMetric::Undefined),
-								   pathToConfig("secgraph-runner.config")
+								   anonMethod(GraphTheory::AnonMethod::Undefined), utilMetric(GraphTheory::UtilMetric::Undefined)
 {
 	this->ioHandler = std::make_unique<IOHandler>();
+	this->utilityMetricFileNames = std::make_unique<std::vector<std::string>>();
+	this->utilityMetricValues = std::make_unique<std::vector<double>>();
+	pathToConfig.assign("secgraph-runner.config");
 }
 
 int SecGraphRunner::run()
@@ -55,7 +57,10 @@ int SecGraphRunner::run()
 				   ioHandler->setInputPathToUtilityMetricsDirectory(pathToUtilityMetricsDirectory, exitCode) &&
 				   ioHandler->setInputPathToAppILResultsDirectory(pathToAppILResultsDirectory, exitCode))
 				{
-					//TODO:implement
+					applicationScenario = ApplicationScenario(pathToAppILScenario);
+					loadUtilityMetricFileNames();
+					loadUtilityMetricValues();
+					fs::path appILResult = calculateAppIL(applicationScenario);
 				}
 				else
 				{
@@ -85,3 +90,17 @@ bool SecGraphRunner::loadDataFromConfigFile()
 	return ioHandler->readDataFromConfigFile(pathToConfig, pathToSecGraph);
 }
 
+fs::path SecGraphRunner::calculateAppIL(const ApplicationScenario & applicationScenario)
+{
+	return fs::path();
+}
+
+void SecGraphRunner::loadUtilityMetricFileNames()
+{
+	ioHandler->loadFileNamesFromDirectory(pathToUtilityMetricsDirectory, utilityMetricFileNames);
+}
+
+void SecGraphRunner::loadUtilityMetricValues()
+{
+	ioHandler->loadAllFilesContentFromDirectory(pathToUtilityMetricsDirectory, utilityMetricValues);
+}

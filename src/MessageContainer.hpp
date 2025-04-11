@@ -45,7 +45,7 @@ struct MessageContainer
 		inline static const std::string INVALID_UTIL_METRIC_NAME =
 				"The utility metric entered is not currently supported.";
 		inline static const std::string CHOOSE_ANON_OR_UTIL =
-				"Please type \"anon\" for graph anonymization, \"util\" for comparison of graph utility metrics or \"exit\" to quit the program.";
+				"Please type \"anon\" for graph anonymization, \"util\" for comparison of graph utility metrics, \"AppIL\" for calculating application-oriented information loss or \"exit\" to quit the program.";
 		inline static const std::string ERROR_CONFIG_FILE =
 				"An error occurred with the secgraph-runner.config file.";
 };

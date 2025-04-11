@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
+#include <queue>
 #include "RunnerState.hpp"
 #include "IOHandler.hpp"
 #include "GraphTheory.hpp"
@@ -21,6 +22,9 @@ class SecGraphRunner
 	private:
 		bool createConfigFile();
 		bool loadDataFromConfigFile();
+		void loadUtilityMetricFileNames();
+		void loadUtilityMetricValues();
+		fs::path calculateAppIL(const ApplicationScenario & applicationScenario);
 
 		std::unique_ptr<IOHandler> ioHandler;
 		RunnerState runnerState;
@@ -35,4 +39,7 @@ class SecGraphRunner
 		fs::path pathToAppILScenario;
 		GraphTheory::AnonMethod anonMethod;
 		GraphTheory::UtilMetric utilMetric;
+		ApplicationScenario applicationScenario;
+		std::unique_ptr<std::vector<std::string>> utilityMetricFileNames;
+		std::unique_ptr<std::vector<double>> utilityMetricValues;
 };
